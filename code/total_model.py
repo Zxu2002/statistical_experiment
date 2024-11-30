@@ -56,9 +56,9 @@ class TotalModel:
     def total_func(self,y,x):
         return self.f * self.s(y,x) + (1-self.f) * self.b(y,x)
 
-total_model = TotalModel()
-result = scipy.integrate.quad(lambda x: total_model.gs(x), 0, 5)
-print(result)
+# total_model = TotalModel()
+# result = scipy.integrate.quad(lambda x: total_model.gs(x), 0, 5)
+# print(result)
 # result = scipy.integrate.quad(lambda y: total_model.hs(y), 0, 10)
 # print(result)
 
@@ -85,13 +85,13 @@ print(result)
 #     lambda x: 10   
 # )
 # print(result)
-result = scipy.integrate.dblquad(
-    total_model.total_func,           
-    0,            
-    5,            
-    lambda x: 0,  
-    lambda x: 10   
-)
+# result = scipy.integrate.dblquad(
+#     total_model.total_func,           
+#     0,            
+#     5,            
+#     lambda x: 0,  
+#     lambda x: 10   
+# )
 # print(result)
 if __name__ == "__main__":
     model = TotalModel()
