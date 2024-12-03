@@ -36,6 +36,7 @@ def fit_func(data, N, mu, sigma, beta, m, f, lamb, mu_b, sigma_b):
     x, y = data
     model = TotalModel(mu, sigma, beta, m, f, lamb, mu_b, sigma_b)
     return N, N * model.total_func(y, x)
+
 def fitting(x,y):
     nll = ExtendedUnbinnedNLL([x,y], fit_func)
     print("fitting")

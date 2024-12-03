@@ -1,7 +1,5 @@
 import numpy as np
-from scipy import stats
-from scipy import optimize
-import timeit
-from generate_sample import generate_sample
-from iminuit import Minuit
-from iminuit.cost import ExtendedUnbinnedNLL
+
+from generate_sample import generate_sample, fitting, fit_func
+x, y = generate_sample(100000)
+mi = fitting(x, y)
