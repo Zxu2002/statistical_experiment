@@ -30,6 +30,7 @@ class TotalModel:
         frac = self.m/self.beta
         mask_tail = ~mask
         valid_tail = mask_tail & (frac - self.beta - z > 0)
+        #Added safety check to avoid power of negative numbers
         if np.any(valid_tail):
             result[valid_tail] = (frac**self.m * np.exp(-self.beta**2/2) * 
                            (frac - self.beta - z[valid_tail])**(-self.m))
