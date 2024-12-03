@@ -115,7 +115,7 @@ if __name__ == "__main__":
     # Plot Y distributions
     axes[1].plot(y_vals, model.hs(y_vals), label='Signal')
     axes[1].plot(y_vals, model.hb(y_vals), label='Background')
-    axes[1].plot(y_vals, model.f * model.hs(x_vals) + (1-model.f) * model.hb(x_vals), label='Total')
+    axes[1].plot(y_vals, model.f * model.hs(y_vals) + (1-model.f) * model.hb(y_vals), label='Total')
     axes[1].set_xlabel('Y')
     axes[1].set_ylabel('PDF')
     axes[1].legend()
