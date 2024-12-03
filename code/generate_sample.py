@@ -40,7 +40,16 @@ def fit_func(data, N, mu, sigma, beta, m, f, lamb, mu_b, sigma_b):
 def fitting(x,y):
     nll = ExtendedUnbinnedNLL([x,y], fit_func)
     print("fitting")
-    mi = Minuit(nll, N = 100000, mu = 0,sigma = 1, beta = 1,m = 1,f = 0.5,lamb = 0.1,mu_b = 0.5,sigma_b = 1)
+    mi = Minuit(nll, N = len(x), mu = 0,sigma = 1, beta = 1,m = 1,f = 0.5,lamb = 0.1,mu_b = 0.5,sigma_b = 1)
+    mi.limits['N'] = (0, None)
+    mi.limits['sigma'] = (0, 1)
+    mi.limits['beta'] = (0, 3)
+    mi.limits['m'] = (1, 3)
+    mi.limits['f'] = (0, 1)
+    mi.limits['lamb'] = (0, 3)
+    mi.limits['mu_b'] = (-3, 3)
+    mi.limits['sigma_b'] = (0, 3)
+
     mi.migrad()
     mi.hesse()
     return mi 

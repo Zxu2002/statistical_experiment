@@ -1,17 +1,20 @@
 import numpy as np
-from total_model import TotalModel
-from generate_sample import fitting, fit_func, generate_sample
+#from total_model import TotalModel
+from generate_sample import fitting, generate_sample
 from tqdm import tqdm
 
 def bootstrape(sample_size,mi,n = 250): 
-    toys = [generate_sample(np.random.poisson(sample_size), *mi.values[1:]) for _ in range(n) ]
+    N = np.random.poisson(sample_size)
+    toys = [generate_sample(N, *mi.values[1:]) for _ in range(n) ]
     values = []
     errors = []
     for toy in tqdm(toys):
         #print(toy) 
         mi_t = fitting(toy[0],toy[1])
-        values.append( list(mi_t.values) ) 
-        errors.append( list(mi_t.errors) )
+        lambda_hat = mi_t.values["lamb"]
+        lambda_err = mi_t.errors["lamb"]
+        values.append(lambda_hat) 
+        errors.append(lambda_err)
     return np.array(values), np.array(errors)
 
 
@@ -21,7 +24,11 @@ print(*mi.values[1:])
 sample_sizes = [500, 1000, 2500, 5000, 10000]
 val = []
 err = []
-for i in sample_sizes:
-    values, errors = bootstrape(i,mi)
+for size in sample_sizes:
+    values, errors = bootstrape(size, mi)
+    
     val.append(values)
     err.append(errors)
+
+np.save('bootstrap_lambda_values.npy', np.array(val))
+np.save('bootstrap_errors.npy', np.array(err))
