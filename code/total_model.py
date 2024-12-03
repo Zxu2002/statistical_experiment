@@ -17,7 +17,7 @@ class TotalModel:
         self.mu_b = mu_b
         self.sigma_b = sigma_b
         #self.norm_crystal = self.sigma * (self.m * np.exp(-self.beta ** 2/2)/(self.beta * (self.m-1)) + np.sqrt(2 * np.pi) * stats.norm.cdf(self.beta, loc = 0,scale = 1))
-        self.norm_crystal = scipy.integrate.quad(lambda x: self.gs_nonorm(x), 0, 5)[0]
+        self.norm_crystal = scipy.integrate.quad(lambda x: self.gs_nonorm(x), 0, 5,epsabs=1e-6, epsrel=1e-6)[0]
         self.hs_norm = 1 - np.exp(-10 * self.lamb)
 
     def gs_nonorm(self,x):
@@ -29,8 +29,10 @@ class TotalModel:
         
         frac = self.m/self.beta
         mask_tail = ~mask
-        result[mask_tail] = (frac**self.m * np.exp(-self.beta**2/2) * 
-                           (frac - self.beta - z[mask_tail])**(-self.m))
+        valid_tail = mask_tail & (frac - self.beta - z > 0)
+        if np.any(valid_tail):
+            result[valid_tail] = (frac**self.m * np.exp(-self.beta**2/2) * 
+                           (frac - self.beta - z[valid_tail])**(-self.m))
         return result
 
     def gs(self,x):
