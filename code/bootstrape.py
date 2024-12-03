@@ -30,5 +30,5 @@ for size in sample_sizes:
     val.append(values)
     err.append(errors)
 
-np.save('bootstrap_lambda_values.npy', np.array(val))
-np.save('bootstrap_errors.npy', np.array(err))
+np.save('code/bootstrap_lambda_values.npy', np.array(val))
+np.save('code/bootstrap_errors.npy', np.array(err))
