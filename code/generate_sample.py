@@ -9,6 +9,9 @@ from iminuit.cost import ExtendedUnbinnedNLL
 
 #Given there's no analytical ppf use accept-reject method
 def generate_sample(num_sample,mu = 3,sigma = 0.3, beta = 1,m = 1.4,f = 0.6,lamb = 0.3,mu_b = 0,sigma_b = 2.5):
+    '''
+    Generate samples from the joint distribution of x and y.
+    '''
     x_grid = np.linspace(0, 5, 100)
     y_grid = np.linspace(0, 10, 100)
     X, Y = np.meshgrid(x_grid, y_grid)
@@ -33,15 +36,22 @@ def generate_sample(num_sample,mu = 3,sigma = 0.3, beta = 1,m = 1.4,f = 0.6,lamb
     return x_samples, y_samples
 
 def fit_func(data, N, mu, sigma, beta, m, f, lamb, mu_b, sigma_b):
+    ''' 
+    The joint distribution model with customized parameters.
+    '''
     x, y = data
     model = TotalModel(mu, sigma, beta, m, f, lamb, mu_b, sigma_b)
     return N, N * model.total_func(y, x)
 
 def fitting(x,y):
+    '''
+    Fit the joint distribution model to the data.
+    '''
     nll = ExtendedUnbinnedNLL([x,y], fit_func)
     print("fitting")
     mi = Minuit(nll, N = len(x), mu = 0,sigma = 1, beta = 1,m = 1,f = 0.5,lamb = 0.1,mu_b = 0.5,sigma_b = 1)
     mi.limits['N'] = (0, None)
+    mi.limits['mu'] = (-3, 3)
     mi.limits['sigma'] = (0, 1)
     mi.limits['beta'] = (0, 3)
     mi.limits['m'] = (1, 3)
@@ -55,6 +65,9 @@ def fitting(x,y):
     return mi 
 
 def run_timeit(num_events=100000, num_trials=100):
+    '''
+    Run timeit for normal distribution, generate_sample and fitting.
+    '''
     t1 = timeit.timeit(lambda: np.random.normal(size=num_events), number=num_trials)
     t2 = timeit.timeit(lambda: generate_sample(num_events), number=num_trials)
     x, y = generate_sample(num_events)

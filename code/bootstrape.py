@@ -4,6 +4,9 @@ from generate_sample import fitting, generate_sample
 from tqdm import tqdm
 
 def bootstrape(sample_size,mi,n = 250): 
+    '''
+    Performs bootstrapping to estimate the error of the parameter lambda.
+    '''
     N = np.random.poisson(sample_size)
     toys = [generate_sample(N, *mi.values[1:]) for _ in range(n) ]
     values = []

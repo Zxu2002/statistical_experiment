@@ -7,7 +7,31 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 class TotalModel:
+    '''
+    This class defines the total model for the signal and background distributions.
+
+    Parameters:
+    mu: float
+        Mean of the signal distribution, x-coordinate
+    sigma: float
+        Standard deviation of the signal distribution, x-coordinate
+    beta: float 
+        Parameter for the signal distribution, x-coordinate
+    m: float    
+        Parameter for the signal distribution, x-coordinate
+    f: float
+        Fraction of signal events, between 0 and 1
+    lamb: float
+        Parameter for the signal distribution, y-coordinate
+    mu_b: float
+        Mean of the background distribution, y-coordinate
+    sigma_b: float
+        Standard deviation of the background distribution, y-coordinate
+    '''
     def __init__(self,mu = 3,sigma = 0.3, beta = 1,m = 1.4,f = 0.6,lamb = 0.3,mu_b = 0,sigma_b = 2.5):
+        '''
+        This function initializes the TotalModel class.
+        '''
         self.mu = mu
         self.sigma = sigma
         self.beta = beta 
@@ -21,6 +45,9 @@ class TotalModel:
         self.hs_norm = 1 - np.exp(-10 * self.lamb)
 
     def gs_nonorm(self,x):
+        '''
+        This function defines the signal distribution on x-coordinate before the normalization process.
+        '''
         z = np.array((x-self.mu)/self.sigma)
         result = np.zeros_like(z, dtype=float)
         
@@ -37,26 +64,47 @@ class TotalModel:
         return result
 
     def gs(self,x):
+        '''
+        This function defines the signal distribution after the normalization process.
+        '''
         return self.gs_nonorm(x)/self.norm_crystal
 
     def hs(self,y):
+        '''
+        This function defines the signal distribution on y-coordinate.
+        '''
         return self.lamb * np.exp(-self.lamb * y)/self.hs_norm
     
 
     def gb(self,x):
+        '''
+        This function defines the background distribution on x-coordinate.
+        '''
         return stats.uniform.pdf(x,loc = 0,scale = 5)
 
     def hb(self,y):
+        '''
+        This function defines the background distribution on y-coordinate.
+        '''
         normal_constant = stats.norm.cdf(10, loc = self.mu_b,scale = self.sigma_b) - stats.norm.cdf(0, loc = self.mu_b,scale = self.sigma_b)
         return stats.norm.pdf(y,loc = self.mu_b, scale = self.sigma_b)/normal_constant
 
     def s(self,y,x):
+        '''
+        This function defines the signal distribution on both x and y coordinates.
+        '''
         return self.gs(x) * self.hs(y)
     
     def b(self,y,x):
+        '''
+        This function defines the background distribution on both x and y coordinates.
+        '''
         return self.gb(x) * self.hb(y)
     
     def total_func(self,y,x):
+        '''
+        This function defines the total distribution on both x and y coordinates.
+        '''
         return self.f * self.s(y,x) + (1-self.f) * self.b(y,x)
 
 # total_model = TotalModel()
