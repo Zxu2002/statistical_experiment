@@ -83,9 +83,12 @@ if __name__ == "__main__":
     for size in sample_sizes:
         val_temp = []
         err_temp = []
-        N = np.random.poisson(size)
-        for _ in  tqdm(range(250)):
-            x,y = generate_sample(N)
+        loaded_toys = np.load(f'code/toys_size_{size}.npz')
+        toy_x = loaded_toys['toy_x']
+        toy_y = loaded_toys['toy_y']
+        for i in  tqdm(range(250)):
+            x = toy_x[i]
+            y = toy_y[i]
             ymi = estimate_y(x, y)
             val_temp.append(ymi.values['lamb'])
             err_temp.append(ymi.errors['lamb'])

@@ -15,14 +15,20 @@ for i in range(len(values_bootstrape)):
 
 #Bootstrape bias and mean error plot
 output_dir = Path("report")
-fig,(ax0,ax1) = plt.subplots(2,1)
+fig,(ax0,ax1) = plt.subplots(1,2, figsize=(12,8))
 ax0.plot(sample_sizes, bias_bootstrape)
 ax0.set_title('Bias')
+ax0.set_xlabel("Sample Size")
+ax0.set_ylabel("Bias")
+ax0.grid(True)
 ax1.plot(sample_sizes, mean_error_bootstrape)
 ax1.set_title('Mean Error')
-plt.suptitle('Bias and Mean Error for different sample sizes for Bootstrapping method on lambda')
+ax1.set_xlabel("Sample Size")
+ax1.set_ylabel("Error")
+plt.suptitle('Bias and Mean Error for different sample sizes for Bootstrapping method on $\lambda$')
 output_file = output_dir / "e_bootstrape_plot.png"  
 plt.savefig(output_file)   
+ax1.grid(True)
 plt.show()
 
 error_sweight = np.load('code/sweight_errors.npy')
@@ -37,27 +43,40 @@ for i in range(len(values_sweight)):
 
 
 #sWeight bias and mean error plot
-fig,(ax0,ax1) = plt.subplots(2,1)
+fig,(ax0,ax1) = plt.subplots(1,2,figsize=(12,8))
 ax0.plot(sample_sizes, bias_sweight)
+ax0.grid(True)
 ax0.set_title('Bias')
+ax0.set_ylabel("Bias")
+ax0.set_xlabel("Sample Size")
 ax1.plot(sample_sizes, mean_error_sweight)
 ax1.set_title('Mean Error')
-plt.suptitle('Bias and Mean Error for different sample sizes for SWeighting method on lambda', fontsize=16)
+
+ax1.set_ylabel("Error")
+ax1.set_xlabel("Sample Size")
+plt.suptitle('Bias and Mean Error for different sample sizes for SWeighting method on $\lambda$', fontsize=16)
 output_file = output_dir / "f_sweight_plot.png"  
 plt.savefig(output_file) 
+ax1.grid(True)
 plt.show()
 
 #Mixed bias and mean error plot
-fig,(ax0,ax1) = plt.subplots(2,1)
+fig,(ax0,ax1) = plt.subplots(1,2, figsize=(12,8))
 ax0.plot(sample_sizes, bias_bootstrape, label='Bootstrape')
 ax0.plot(sample_sizes, bias_sweight, label='sWeight')
+ax0.set_ylabel("Bias")
+ax0.set_xlabel("Sample Size")
+ax0.grid(True)
 ax0.legend()
 ax0.set_title('Bias')
 ax1.plot(sample_sizes, mean_error_bootstrape, label='Bootstrape')
 ax1.plot(sample_sizes, mean_error_sweight, label='sWeight')
 ax1.set_title('Mean Error')
 ax1.legend()
-plt.suptitle('Bias and Mean Error for different sample sizes for Bootstrapping and SWeight method on lambda')
+ax1.grid(True)
+ax1.set_xlabel("Sample Size")
+ax1.set_ylabel("Error")
+plt.suptitle('Bias and Mean Error for different sample sizes for Bootstrapping and SWeight method on $\lambda$')
 output_file = output_dir / "g_comparison_plot.png"  
 plt.savefig(output_file)   
 plt.show()
