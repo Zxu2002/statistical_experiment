@@ -1,7 +1,7 @@
 import numpy as np
 from generate_sample import fitting, generate_sample
 from tqdm import tqdm
-from sweights import Cows 
+from sweights import SWeight, Cows 
 from total_model import TotalModel
 from iminuit import Minuit
 from iminuit.cost import ExtendedUnbinnedNLL
@@ -47,8 +47,24 @@ def get_sweights(x, lamb = 0.3, mu_b = 0, sigma_b = 2.5):
     mi = fitting_x(x)
     model = TotalModel(*mi.values['mu','sigma', 'beta','m','f'], lamb, mu_b, sigma_b)
 
-    sw = Cows(x, model.gs, model.gb)
-    return sw(x)
+    # sw = Cows(x, model.gs, model.gb)
+    N = mi.values['N']
+    f = mi.values['f']
+    N_signal = N * f
+    N_background = N * (1 - f)
+    def x_signal_pdf(x_vals):
+        return model.gs(x_vals)
+    
+    def x_background_pdf(x_vals):
+        return model.gb(x_vals)
+    
+    sweighter = SWeight(x, pdfs=[x_signal_pdf, x_background_pdf], yields=[N_signal, N_background])
+
+    weights = sweighter.get_weight(0,x)
+    
+    # return sw(x)
+
+    return weights
 
 def estimate_y(x, y):
     '''

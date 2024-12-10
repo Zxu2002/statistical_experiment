@@ -27,8 +27,8 @@ ax1.set_xlabel("Sample Size")
 ax1.set_ylabel("Error")
 plt.suptitle('Bias and Mean Error for different sample sizes for Bootstrapping method on $\lambda$')
 output_file = output_dir / "e_bootstrape_plot.png"  
-plt.savefig(output_file)   
 ax1.grid(True)
+plt.savefig(output_file)  
 plt.show()
 
 error_sweight = np.load('code/sweight_errors.npy')
@@ -56,8 +56,9 @@ ax1.set_ylabel("Error")
 ax1.set_xlabel("Sample Size")
 plt.suptitle('Bias and Mean Error for different sample sizes for SWeighting method on $\lambda$', fontsize=16)
 output_file = output_dir / "f_sweight_plot.png"  
-plt.savefig(output_file) 
+
 ax1.grid(True)
+plt.savefig(output_file) 
 plt.show()
 
 #Mixed bias and mean error plot

@@ -16,11 +16,11 @@ def bootstrape(toys,mi):
         mi_t = fitting(toy[0],toy[1])
         lambda_hat = mi_t.values["lamb"]
         lambda_err = mi_t.errors["lamb"]
-        values.append(lambda_hat) 
+        values.append(lambda_hat)
         errors.append(lambda_err)
     return np.array(values), np.array(errors)
 
-
+ 
 x, y = generate_sample(100000)
 mi = fitting(x, y)
 print(*mi.values[1:])
@@ -44,7 +44,7 @@ for size in sample_sizes:
     values, errors = bootstrape(toys, mi)
     val.append(values)
     err.append(errors)
-    
+     
 
 np.save('code/bootstrap_lambda_values.npy', np.array(val))
 np.save('code/bootstrap_errors.npy', np.array(err))
