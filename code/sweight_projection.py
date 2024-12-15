@@ -58,13 +58,15 @@ def get_sweights(x, lamb = 0.3, mu_b = 0, sigma_b = 2.5):
     def x_background_pdf(x_vals):
         return model.gb(x_vals)
     
-    sweighter = SWeight(x, pdfs=[x_signal_pdf, x_background_pdf], yields=[N_signal, N_background])
+    # sweighter = SWeight(x, pdfs=[x_signal_pdf, x_background_pdf], yields=[N_signal, N_background])
 
-    weights = sweighter.get_weight(0,x)
-    
+    # weights = sweighter.get_weight(0,x)
+    def norm_opt(x):
+        return ((1-f)*x_background_pdf(x) + f* x_signal_pdf(x))/ (N_signal + N_background)
+    sweighter = Cows(x, x_signal_pdf, x_background_pdf, norm_opt, summation=True)[0](x)
     # return sw(x)
 
-    return weights
+    return sweighter
 
 def estimate_y(x, y):
     '''
@@ -74,20 +76,20 @@ def estimate_y(x, y):
     # print(f"x shape: {np.shape(x)}")
     # print(f"y shape: {np.shape(y)}")
 
-    def y_model(y, lamb, mu_b, sigma_b):
+    def y_model(y, lamb):
         #The y model.
-        model = TotalModel(*mi.values['mu','sigma', 'beta','m','f'], lamb, mu_b, sigma_b)
-        target = model.f * model.hs(y) + (1 - model.f) * model.hb(y)
+        hs_norm = 1 - np.exp(-10 * lamb)
+        target = lamb * np.exp(-lamb * y)/hs_norm
         return target
     
-    mi = fitting_x(x)
+    # mi = fitting_x(x)
     sw = get_sweights(x)
     weighted_nll = make_weighted_negative_log_likelihood(y, sw, y_model)
-    ymi = Minuit(weighted_nll, lamb = 0.1,mu_b = 0.5,sigma_b = 1)
-    
-    ymi.limits['lamb'] = (0, 3)
-    ymi.limits['mu_b'] = (-3, 3)
-    ymi.limits['sigma_b'] = (0, 3)
+    # ymi = Minuit(weighted_nll, lamb = 0.1,mu_b = 0.5,sigma_b = 1)
+    ymi = Minuit(weighted_nll, lamb = 0.1)
+    ymi.limits['lamb'] = (0, 1)
+    # ymi.limits['mu_b'] = (-3, 3)
+    # ymi.limits['sigma_b'] = (0, 3)
     ymi.migrad()
     ymi.hesse()
     return ymi 
