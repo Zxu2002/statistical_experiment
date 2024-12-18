@@ -39,3 +39,6 @@ The structure of the project is the following:
 In the code folder, the ```total_model.py``` file contains definition for the multi-dimensional probability distribution. The ```generate_sample.py``` generates sample from the distirbution and performs an extended maximum likelihood fit for the parameters. The files ```bootstrape.py``` and ```sweight_projection.py``` perfoms multi-dimensional likelihood fit and weighted fit repspectively, generating results in the npy files. The python file ```analyze_efg.py``` analyzes the data in npy files and produce plots to answer question (e), (f) and (g). 
 All the plots are saved in the report folder. 
 To execute each file, please run the files directly. 
+
+# Acknowledgement
+The code was developed with the assistance from Anthropic’s Claude 3.5 Sonnet. Specifically, Claude was used to assist with debugging Python code implementations of statistical analysis methods. All AI-generated suggestions were manually reviewed.
