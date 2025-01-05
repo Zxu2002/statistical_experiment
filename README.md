@@ -1,4 +1,4 @@
-S1 Coursework: Multi-Dimensional Probability Distribution
+Statistical Experiment: Multi-Dimensional Probability Distribution
 =========================================================
 
 ***Michaelmas Term 2024***
